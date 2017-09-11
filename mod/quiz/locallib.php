@@ -2063,12 +2063,15 @@ function quiz_add_quiz_question($questionid, $quiz, $page = 0, $maxmark = null) 
         $slot->slot = $lastslotbefore + 1;
         $slot->page = min($page, $maxpage + 1);
 
-        $DB->execute("
-                UPDATE {quiz_sections}
-                   SET firstslot = firstslot + 1
-                 WHERE quizid = ?
-                   AND firstslot > ?
-                ", array($quiz->id, max($lastslotbefore, 1)));
+        // Free the necessary slot for the new question instance in the given quiz.
+        // This task was done in one SQL query previously, but the DBMS failed this SQL query because of index violations
+        // (see MDL-57228 for details).
+        $sectionsoldslots = $DB->get_fieldset_select('quiz_sections', 'firstslot', 'quizid = ? AND firstslot > ?',
+                array($quiz->id, max($lastslotbefore, 1)));
+        foreach ($sectionsoldslots as $sos) {
+            $sectionsnewslots[$sos] = $sos + 1;
+        }
+        update_field_with_unique_index('quiz_sections', 'firstslot', $sectionsnewslots, array('quizid' => $quiz->id));
 
     } else {
         $lastslot = end($slots);
