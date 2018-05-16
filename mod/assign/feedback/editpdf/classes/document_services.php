@@ -185,8 +185,11 @@ EOD;
                     if ($file instanceof \stored_file) {
                         if ($file->get_mimetype() === 'application/pdf') {
                             $files[$filename] = $file;
-                        } else if ($convertedfile = $converter->start_conversion($file, 'pdf')) {
-                            $files[$filename] = $convertedfile;
+                        } else {
+                            $convertedfile = $converter->start_conversion($file, 'pdf');
+                            if ($convertedfile instanceof \stored_file) {
+                                $files[$filename] = $convertedfile;
+                            }
                         }
                     } else if ($converter->can_convert_format_to('html', 'pdf')) {
                         // Create a tmp stored_file from this html string.
