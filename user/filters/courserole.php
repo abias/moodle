@@ -81,9 +81,10 @@ class user_filter_courserole extends user_filter_type {
         $objs['role']->setLabel(get_string('courserole', 'filters'));
         $objs['category'] = $mform->createElement('select', $this->_name .'_ct', null, $this->get_course_categories());
         $objs['category']->setLabel(get_string('coursecategory', 'filters'));
-        $objs['value'] = $mform->createElement('text', $this->_name, null);
-        $objs['value']->setLabel(get_string('coursevalue', 'filters'));
-        $grp =& $mform->addElement('group', $this->_name.'_grp', $this->_label, $objs, '', false);
+        $objs['includesubcats'] = $mform->createElement('checkbox', $this->_name . '_sct', null,
+                get_string('includesubcategories', 'filters'));
+        $mform->disabledIf($this->_name . '_sct', $this->_name  . '_ct', 'eq', 0);
+        $mform->addElement('group', $this->_name.'_grp', $this->_label, $objs, '', false);
         $mform->setType($this->_name, PARAM_TEXT);
         if ($this->_advanced) {
             $mform->setAdvanced($this->_name.'_grp');
@@ -96,20 +97,21 @@ class user_filter_courserole extends user_filter_type {
      * @return mixed array filter data or false when filter not set
      */
     public function check_data($formdata) {
-        $field    = $this->_name;
-        $role     = $field .'_rl';
-        $category = $field .'_ct';
+        $field          = $this->_name;
+        $role           = $field .'_rl';
+        $category       = $field .'_ct';
+        $includesubcats = $field .'_sct';
 
-        if (array_key_exists($field, $formdata)) {
-            if (empty($formdata->$field) and empty($formdata->$role) and empty($formdata->$category)) {
-                // Nothing selected.
-                return false;
-            }
-            return array('value'      => (string)$formdata->$field,
-                         'roleid'     => (int)$formdata->$role,
-                         'categoryid' => (int)$formdata->$category);
+        if (empty($formdata->$role) and empty($formdata->$category)) {
+            // Nothing selected.
+            return false;
         }
-        return false;
+
+        return array(
+                'includesubcats' => (isset($formdata->$includesubcats) ? (string)$formdata->$includesubcats : false),
+                'roleid' => (int)$formdata->$role,
+                'categoryid' => (int)$formdata->$category
+        );
     }
 
     /**
@@ -120,15 +122,16 @@ class user_filter_courserole extends user_filter_type {
     public function get_sql_filter($data) {
         global $CFG, $DB;
         static $counter = 0;
-        $pref = 'ex_courserole'.($counter++).'_';
 
-        $value      = $data['value'];
-        $roleid     = $data['roleid'];
-        $categoryid = $data['categoryid'];
+        $pref = 'ex_crolesubcat'.($counter++).'_';
+
+        $roleid         = $data['roleid'];
+        $categoryid     = $data['categoryid'];
+        $includesubcats = $data['includesubcats'];
 
         $params = array();
 
-        if (empty($value) and empty($roleid) and empty($categoryid)) {
+        if (empty($roleid) and empty($categoryid)) {
             return array('', $params);
         }
 
@@ -138,12 +141,16 @@ class user_filter_courserole extends user_filter_type {
             $params[$pref.'roleid'] = $roleid;
         }
         if ($categoryid) {
-            $where .= " AND c.category = :{$pref}categoryid";
-            $params[$pref.'categoryid'] = $categoryid;
-        }
-        if ($value) {
-            $where .= " AND c.shortname = :{$pref}course";
-            $params[$pref.'course'] = $value;
+            if ($includesubcats) {
+                $categories = coursecat::get($categoryid)->get_all_children_ids();
+                array_push($categories, $categoryid);
+                list($catsql, $catparams) = $DB->get_in_or_equal($categories, SQL_PARAMS_NAMED, $pref);
+                $where .= ' AND c.category ' . $catsql;
+                $params = array_merge($params, $catparams);
+            } else {
+                $where .= " AND c.category = :{$pref}categoryid";
+                $params[$pref.'categoryid'] = $categoryid;
+            }
         }
         return array("id IN (SELECT userid
                                FROM {role_assignments} a
@@ -160,9 +167,9 @@ class user_filter_courserole extends user_filter_type {
     public function get_label($data) {
         global $DB;
 
-        $value      = $data['value'];
         $roleid     = $data['roleid'];
         $categoryid = $data['categoryid'];
+        $includesubcats = $data['includesubcats'];
 
         $a = new stdClass();
         $a->label = $this->_label;
@@ -177,17 +184,12 @@ class user_filter_courserole extends user_filter_type {
         if ($categoryid) {
             $catname = $DB->get_field('course_categories', 'name', array('id' => $categoryid));
             $a->categoryname = '"'.format_string($catname).'"';
-        } else {
-            $a->categoryname = get_string('anycategory', 'filters');
-        }
 
-        if ($value) {
-            $a->coursename = '"'.s($value).'"';
-            if (!$DB->record_exists('course', array('shortname' => $value))) {
-                return '<span class="notifyproblem">'.get_string('courserolelabelerror', 'filters', $a).'</span>';
+            if ($includesubcats) {
+                $a->categoryname .= ' ('.get_string('includingsubcategories', 'filters').')';
             }
         } else {
-            $a->coursename = get_string('anycourse', 'filters');
+            $a->categoryname = get_string('anycategory', 'filters');
         }
 
         return get_string('courserolelabel', 'filters', $a);
