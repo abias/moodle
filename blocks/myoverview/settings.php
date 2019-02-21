@@ -39,6 +39,13 @@ if ($ADMIN->fulltree) {
             get_string('displaycategories_help', 'block_myoverview'),
             1));
 
+    // Display course patterns / course images in the card layout and summary layout.
+    $settings->add(new admin_setting_configcheckbox(
+            'block_myoverview/displaycourseimages',
+            get_string('displaycourseimages', 'block_myoverview'),
+            get_string('displaycourseimages_desc', 'block_myoverview'),
+            1));
+
     // Enable / Disable available layouts.
     $choices = array(BLOCK_MYOVERVIEW_VIEW_CARD => get_string('card', 'block_myoverview'),
             BLOCK_MYOVERVIEW_VIEW_LIST => get_string('list', 'block_myoverview'),

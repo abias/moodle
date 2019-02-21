@@ -147,8 +147,10 @@ define(
          */
         var renderAllCourses = function(courses) {
             var showcoursecategory = $(SELECTORS.BLOCK_CONTAINER).data('displaycoursecategory');
+            var showcourseimage = $(SELECTORS.BLOCK_CONTAINER).data('displaycourseimages');
             var promises = courses.map(function(course) {
                 course.showcoursecategory = showcoursecategory;
+                course.showcourseimage = showcourseimage;
                 return Templates.render('block_recentlyaccessedcourses/course-card', course);
             });
 

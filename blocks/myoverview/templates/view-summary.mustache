@@ -26,6 +26,7 @@
                 "name": "Assignment due 1",
                 "viewurl": "https://moodlesite/course/view.php?id=2",
                 "courseimage": "https://moodlesite/pluginfile/123/course/overviewfiles/123.jpg",
+                "showcourseimage": true,
                 "fullname": "course 3",
                 "summary": "This course is about assignments",
                 "hasprogress": true,
@@ -42,11 +43,15 @@
         data-region="course-content"
         data-course-id="{{{id}}}">
         <div class="d-flex">
-            <a href="{{viewurl}}" tabindex="-1">
-                <div class="summaryimage rounded-circle mr-1" style='background-image: url("{{{courseimage}}}");'>
-                    <span class="sr-only">{{#str}}aria:courseimage, core_course{{/str}}</span>
-                </div>
-            </a>
+            {{#courseimage}}
+                {{#showcourseimage}}
+                    <a href="{{viewurl}}" tabindex="-1">
+                        <div class="summaryimage rounded-circle mr-1" style='background-image: url("{{{courseimage}}}");'>
+                            <span class="sr-only">{{#str}}aria:courseimage, core_course{{/str}}</span>
+                        </div>
+                    </a>
+                {{/showcourseimage}}
+            {{/courseimage}}
 
             <div class="align-self-stretch d-flex flex-column w-100">
                 <div class="text-muted muted mb-1 d-flex flex-wrap">

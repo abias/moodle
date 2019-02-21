@@ -81,10 +81,12 @@ function(
 
         return Repository.getStarredCourses(args)
             .then(function(courses) {
-                // Whether the course category should be displayed in the course item.
+                // Whether the course category or the course image should be displayed in the course item.
                 var showcoursecategory = $(SELECTORS.BLOCK_CONTAINER).data('displaycoursecategory');
+                var showcourseimage = $(SELECTORS.BLOCK_CONTAINER).data('displaycourseimages');
                 courses = courses.map(function(course) {
                     course.showcoursecategory = showcoursecategory;
+                    course.showcourseimage = showcourseimage;
                     return course;
                 });
                 return renderCourses(root, courses);

@@ -102,6 +102,7 @@ function(
             grouping: courseRegion.attr('data-grouping'),
             sort: courseRegion.attr('data-sort'),
             displaycategories: courseRegion.attr('data-displaycategories'),
+            displaycourseimages: courseRegion.attr('data-displaycourseimages'),
         };
     };
 
@@ -470,9 +471,10 @@ function(
             currentTemplate = TEMPLATES.COURSES_SUMMARY;
         }
 
-        // Whether the course category should be displayed in the course item.
+        // Whether the course category and course image should be displayed in the course item.
         coursesData.courses = coursesData.courses.map(function(course) {
             course.showcoursecategory = filters.displaycategories == 'on' ? true : false;
+            course.showcourseimage = filters.displaycourseimages == 'on' ? true : false;
             return course;
         });
 

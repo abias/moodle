@@ -25,10 +25,22 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
+    // Presentation options heading.
+    $settings->add(new admin_setting_heading('block_recentlyaccessedcourses/appearance',
+        get_string('appearance', 'admin'),
+        ''));
+
     // Display Course Categories on the recently accessed courses block items.
     $settings->add(new admin_setting_configcheckbox(
         'block_recentlyaccessedcourses/displaycategories',
         get_string('displaycategories', 'block_recentlyaccessedcourses'),
         get_string('displaycategories_help', 'block_recentlyaccessedcourses'),
+        1));
+
+    // Display course patterns / course images on the recently accessed courses block items.
+    $settings->add(new admin_setting_configcheckbox(
+        'block_recentlyaccessedcourses/displaycourseimages',
+        get_string('displaycourseimages', 'block_recentlyaccessedcourses'),
+        get_string('displaycourseimages_desc', 'block_recentlyaccessedcourses'),
         1));
 }

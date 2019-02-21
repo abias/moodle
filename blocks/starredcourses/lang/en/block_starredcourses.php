@@ -24,6 +24,8 @@
 
 $string['displaycategories'] = 'Display categories';
 $string['displaycategories_help'] = 'Display the course category on the starred courses block items.';
+$string['displaycourseimages'] = 'Display course images';
+$string['displaycourseimages_desc'] = 'Display the course image (respectively the course pattern if there is no course image uploaded to a course or if course images are disabled globally) on the starred courses block items.';
 $string['pluginname'] = 'Starred courses';
 $string['privacy:metadata'] = 'The starred courses block does not store any personal data.';
 $string['starredcourses:myaddinstance'] = 'Add a new starred courses block to Dashboard';

@@ -25,10 +25,22 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
+    // Presentation options heading.
+    $settings->add(new admin_setting_heading('block_starredcourses/appearance',
+        get_string('appearance', 'admin'),
+        ''));
+
     // Display Course Categories on the starred courses block items.
     $settings->add(new admin_setting_configcheckbox(
         'block_starredcourses/displaycategories',
         get_string('displaycategories', 'block_starredcourses'),
         get_string('displaycategories_help', 'block_starredcourses'),
+        1));
+
+    // Display course patterns / course images on the starred courses block items.
+    $settings->add(new admin_setting_configcheckbox(
+        'block_starredcourses/displaycourseimages',
+        get_string('displaycourseimages', 'block_starredcourses'),
+        get_string('displaycourseimages_desc', 'block_starredcourses'),
         1));
 }

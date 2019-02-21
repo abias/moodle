@@ -55,7 +55,8 @@ class main implements renderable, templatable {
         return [
             'userid' => $USER->id,
             'nocoursesimg' => $nocoursesurl,
-            'displaycategories' => !empty($config->displaycategories)
+            'displaycategories' => !empty($config->displaycategories),
+            'displaycourseimages' => !empty($config->displaycourseimages)
         ];
     }
 }

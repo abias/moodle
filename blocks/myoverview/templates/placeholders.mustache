@@ -24,7 +24,7 @@
 }}
 <div data-region="loading-placeholder-content" aria-hidden="true">
     {{#cards}}
-    <div class="card-deck dashboard-card-deck one-row" style="height: 13rem">
+    <div class="card-deck dashboard-card-deck one-row" style="height: {{#showcourseimage}}13{{/showcourseimage}}{{^showcourseimage}}10{{/showcourseimage}}rem">
         {{> core_course/placeholder-course }}
         {{> core_course/placeholder-course }}
         {{> core_course/placeholder-course }}
@@ -62,9 +62,11 @@
     {{#summary}}
     <div class="course-summaryitem mb-1 p-2">
         <div class="d-flex">
+            {{#showcourseimage}}
             <div class="d-flex">
                 <div class="bg-pulse-grey rounded-circle m-0 p-0 mr-1" style="height: 7rem; width: 7rem;"></div>
             </div>
+            {{/showcourseimage}}
             <div class="d-flex w-100 flex-column">
                 <div class="bg-pulse-grey w-50 mb-1" style="height: 1rem; margin: 0.5rem 0"></div>
                 <div class="bg-pulse-grey w-100" style="height: 13rem"></div>

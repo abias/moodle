@@ -65,6 +65,12 @@ define('BLOCK_MYOVERVIEW_DISPLAY_CATEGORIES_ON', 'on');
 define('BLOCK_MYOVERVIEW_DISPLAY_CATEGORIES_OFF', 'off');
 
 /**
+ * Constants for the admin course image display setting
+ */
+define('BLOCK_MYOVERVIEW_DISPLAY_COURSEIMAGES_ON', 'on');
+define('BLOCK_MYOVERVIEW_DISPLAY_COURSEIMAGES_OFF', 'off');
+
+/**
  * Get the current user preferences that are available
  *
  * @return mixed Array representing current options along with defaults

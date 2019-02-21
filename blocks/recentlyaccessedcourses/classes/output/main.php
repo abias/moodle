@@ -55,7 +55,8 @@ class main implements renderable, templatable {
                 'next' => true,
                 'previous' => true
             ],
-            'displaycategories' => !empty($config->displaycategories)
+            'displaycategories' => !empty($config->displaycategories),
+            'displaycourseimages' => !empty($config->displaycourseimages)
         ];
     }
 }

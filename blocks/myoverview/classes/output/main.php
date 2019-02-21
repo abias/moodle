@@ -131,6 +131,13 @@ class main implements renderable, templatable {
     private $displaygroupinghidden;
 
     /**
+     * Store the display course images config setting
+     *
+     * @var boolean
+     */
+    private $displaycourseimages;
+
+    /**
      * main constructor.
      * Initialize the user preferences
      *
@@ -193,6 +200,13 @@ class main implements renderable, templatable {
             $this->displaycategories = BLOCK_MYOVERVIEW_DISPLAY_CATEGORIES_OFF;
         } else {
             $this->displaycategories = BLOCK_MYOVERVIEW_DISPLAY_CATEGORIES_ON;
+        }
+
+        // Check and remember if the course images should be shown or not.
+        if (!$config->displaycourseimages) {
+            $this->displaycourseimages = BLOCK_MYOVERVIEW_DISPLAY_COURSEIMAGES_OFF;
+        } else {
+            $this->displaycourseimages = BLOCK_MYOVERVIEW_DISPLAY_COURSEIMAGES_ON;
         }
 
         // Get and remember the available layouts.
@@ -318,6 +332,7 @@ class main implements renderable, templatable {
             'paging' => $this->paging,
             'layouts' => $availablelayouts,
             'displaycategories' => $this->displaycategories,
+            'displaycourseimages' => $this->displaycourseimages,
             'displaydropdown' => (count($availablelayouts) > 1) ? true : false,
             'displaygroupingallincludinghidden' => $this->displaygroupingallincludinghidden,
             'displaygroupingall' => $this->displaygroupingall,

@@ -22,6 +22,8 @@
  */
 $string['displaycategories'] = 'Display categories';
 $string['displaycategories_help'] = 'Display the course category on the recently accessed courses block items.';
+$string['displaycourseimages'] = 'Display course images';
+$string['displaycourseimages_desc'] = 'Display the course image (respectively the course pattern if there is no course image uploaded to a course or if course images are disabled globally) on the recently accessed courses block items.';
 $string['pluginname'] = 'Recently accessed courses';
 $string['privacy:metadata'] = 'The Recently accessed courses block does not store any personal data.';
 $string['recentlyaccessedcourses:myaddinstance'] = 'Add a new recently accessed courses block to Dashboard';
