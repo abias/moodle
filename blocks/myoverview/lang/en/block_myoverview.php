@@ -47,6 +47,7 @@ $string['card'] = 'Card';
 $string['cards'] = 'Cards';
 $string['courseprogress'] = 'Course progress:';
 $string['complete'] = 'Complete';
+$string['completepercent'] = '{$a}% complete';
 $string['favourites'] = 'Starred';
 $string['future'] = 'Future';
 $string['inprogress'] = 'In progress';
