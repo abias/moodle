@@ -3402,5 +3402,23 @@ function xmldb_main_upgrade($oldversion) {
         upgrade_main_savepoint(true, 2019062900.00);
     }
 
+    if ($oldversion < 2019070400.01) {
+        // The setting $CFG->notifyloginthreshold is now split into $CFG->notifyloginthresholduser and $CFG->notifyloginthresholdip.
+
+        $notifyloginthresholdvalue = get_config('core', 'notifyloginthreshold');
+
+        // Move the value over if it was previously configured.
+        if ($notifyloginthresholdvalue != 10) {
+            set_config('notifyloginthresholduser', $notifyloginthresholdvalue);
+            set_config('notifyloginthresholdip', $notifyloginthresholdvalue);
+        }
+
+        // Remove the now unused value.
+        unset_config('notifyloginthresholdvalue');
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2019070400.01);
+    }
+
     return true;
 }

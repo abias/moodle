@@ -146,6 +146,11 @@ if ($hassiteconfig) { // speedup for non-admins, add all caps used on this page
     for ($i = 1; $i <= 100; $i++) {
         $options[$i] = $i;
     }
-    $temp->add(new admin_setting_configselect('notifyloginthreshold', new lang_string('notifyloginthreshold', 'admin'), new lang_string('confignotifyloginthreshold', 'admin'), '10', $options));
+    $temp->add(new admin_setting_configselect('notifyloginthresholduser',
+            new lang_string('notifyloginthreshold', 'admin', new lang_string('oneuser', 'admin')),
+            new lang_string('confignotifyloginthreshold', 'admin', new lang_string('oneuser', 'admin')), '10', $options));
+    $temp->add(new admin_setting_configselect('notifyloginthresholdip',
+            new lang_string('notifyloginthreshold', 'admin', new lang_string('oneip', 'admin')),
+            new lang_string('confignotifyloginthreshold', 'admin', new lang_string('oneip', 'admin')), '10', $options));
     $ADMIN->add('security', $temp);
 } // end of speedup

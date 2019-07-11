@@ -65,11 +65,14 @@ class send_failed_login_notifications_task extends scheduled_task {
         }
 
         // We need to deal with the threshold stuff first.
-        if (empty($CFG->notifyloginthreshold)) {
-            $CFG->notifyloginthreshold = 10; // Default to something sensible.
+        if (empty($CFG->notifyloginthresholduser)) {
+            $CFG->notifyloginthresholduser = 10; // Default to something sensible.
+        }
+        if (empty($CFG->notifyloginthresholdip)) {
+            $CFG->notifyloginthresholdip = 10; // Default to something sensible.
         }
 
-        // Get all the IPs with more than notifyloginthreshold failures since lastnotifyfailure
+        // Get all the IPs with more than notifyloginthresholdip failures since lastnotifyfailure
         // and insert them into the cache_flags temp table.
         $logmang = get_log_manager();
         $readers = $logmang->get_readers('\core\log\sql_internal_table_reader');
@@ -87,7 +90,7 @@ class send_failed_login_notifications_task extends scheduled_task {
                        AND timecreated > ?
                GROUP BY ip
                  HAVING COUNT(*) >= ?";
-        $params = array('\core\event\user_login_failed', $CFG->lastnotifyfailure, $CFG->notifyloginthreshold);
+        $params = array('\core\event\user_login_failed', $CFG->lastnotifyfailure, $CFG->notifyloginthresholdip);
         $rs = $DB->get_recordset_sql($sql, $params);
         foreach ($rs as $iprec) {
             if (!empty($iprec->ip)) {
@@ -96,7 +99,7 @@ class send_failed_login_notifications_task extends scheduled_task {
         }
         $rs->close();
 
-        // Get all the INFOs with more than notifyloginthreshold failures since lastnotifyfailure
+        // Get all the INFOs with more than notifyloginthresholduser failures since lastnotifyfailure
         // and insert them into the cache_flags temp table.
         $sql = "SELECT userid, count(*)
                   FROM {" . $logtable . "}
@@ -104,7 +107,7 @@ class send_failed_login_notifications_task extends scheduled_task {
                        AND timecreated > ?
               GROUP BY userid
                 HAVING count(*) >= ?";
-        $params = array('\core\event\user_login_failed', $CFG->lastnotifyfailure, $CFG->notifyloginthreshold);
+        $params = array('\core\event\user_login_failed', $CFG->lastnotifyfailure, $CFG->notifyloginthresholduser);
         $rs = $DB->get_recordset_sql($sql, $params);
         foreach ($rs as $inforec) {
             if (!empty($inforec->info)) {
