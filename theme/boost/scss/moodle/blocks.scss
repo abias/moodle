@@ -82,7 +82,9 @@ $card-gutter : $card-deck-margin * 2;
 }
 
 .block .block-cards {
-    .course-info-container {
+    .course-info-container,
+    .list-group-item.course-summaryitem,
+    .list-group-item.course-listitem {
         padding: 0.8rem;
     }
     .progress {
@@ -95,8 +97,9 @@ $card-gutter : $card-deck-margin * 2;
     .icon {
         margin-right: 0;
     }
-    .card .coursemenubtn {
+    .coursemenubtn {
         margin-top: -0.5rem;
+        margin-right: -0.5rem;
     }
     a.coursename,
     span.categoryname,

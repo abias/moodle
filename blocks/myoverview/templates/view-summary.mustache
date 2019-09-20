@@ -37,72 +37,75 @@
         ]
     }
 }}
-<div role="list">
+<ul class="list-group">
 {{#courses}}
-    <div class="course-summaryitem mb-1 p-2" role="listitem"
+    <li class="list-group-item course-summaryitem mb-1"
         data-region="course-content"
         data-course-id="{{{id}}}">
         <div class="d-flex">
             {{#courseimage}}
                 {{#showcourseimage}}
                     <a href="{{viewurl}}" tabindex="-1">
-                        <div class="summaryimage rounded-circle mr-1" style='background-image: url("{{{courseimage}}}");'>
+                        <div class="summaryimage rounded-circle mr-2" style='background-image: url("{{{courseimage}}}");'>
                             <span class="sr-only">{{#str}}aria:courseimage, core_course{{/str}}</span>
                         </div>
                     </a>
                 {{/showcourseimage}}
             {{/courseimage}}
-
-            <div class="align-self-stretch d-flex flex-column w-100">
-                <div class="text-muted muted mb-1 d-flex flex-wrap">
-                    <span class="sr-only">
-                        {{#str}}aria:coursecategory, core_course{{/str}}
-                    </span>
-                    {{$coursecategory}}
-                        {{#showcoursecategory}}
-                            <span class="categoryname">
-                                {{#coursecategory}}
-                                    {{{coursecategory}}}
-                                {{/coursecategory}}
-                            </span>
-                        {{/showcoursecategory}}
-                    {{/coursecategory}}
-                    {{#showshortname}}
-                        {{#showcoursecategory}}
-                            <div class="pl-1 pr-1">|</div>
-                        {{/showcoursecategory}}
-                    <span class="sr-only">
-                        {{#str}}aria:courseshortname, core_course{{/str}}
-                    </span>
-                    <div>{{{shortname}}}</div>
-                    {{/showshortname}}
-                </div>
-                <div class="d-flex mb-1">
-                    <a href="{{viewurl}}" class="coursename">
-                        {{> core_course/favouriteicon }}
-                        <span class="sr-only">
-                            {{#str}}aria:coursename, core_course{{/str}}
-                        </span>
-                        <h6 class="d-inline h5">{{{fullname}}}</h6>
-                    </a>
+            <div class="class="align-self-stretch d-flex flex-column w-100">
+                <div class="pull-right d-flex">
                     {{> block_myoverview/course-action-menu }}
                 </div>
-                {{^visible}}
-                    <div class="d-flex flex-wrap">
-                        <span class="tag tag-info">{{#str}} hiddenfromstudents {{/str}}</span>
+                <div class="row-fluid">
+                    <div class="{{#hasprogress}}col-md-6{{/hasprogress}}{{^hasprogress}}col-md-11{{/hasprogress}} d-flex align-items-center">
+                        <div>
+                            <div class="text-muted muted d-flex mb-1 flex-wrap">
+                                {{#showcoursecategory}}
+                                    <span class="sr-only">
+                                        {{#str}}aria:coursecategory, core_course{{/str}}
+                                    </span>
+                                    <span class="categoryname">
+                                        {{{coursecategory}}}
+                                    </span>
+                                {{/showcoursecategory}}
+                                {{#showshortname}}
+                                    {{#showcoursecategory}}
+                                        <div class="pl-1 pr-1">|</div>
+                                    {{/showcoursecategory}}
+                                    <span class="sr-only">
+                                        {{#str}}aria:courseshortname, core_course{{/str}}
+                                    </span>
+                                    <div>{{{shortname}}}</div>
+                                {{/showshortname}}
+                            </div>
+                            <a href="{{viewurl}}" class="coursename">
+                                {{> core_course/favouriteicon }}
+                                <span class="sr-only">
+                                    {{#str}}aria:coursename, core_course{{/str}}
+                                </span>
+                                {{{fullname}}}
+                           </a>
+                           {{^visible}}
+                               <div class="d-flex flex-wrap">
+                                   <span class="tag tag-info">{{#str}} hiddenfromstudents {{/str}}</span>
+                               </div>
+                           {{/visible}}
+                        </div>
                     </div>
-                {{/visible}}
-                <div class="summary">
-                    <span class="sr-only">{{#str}}aria:coursesummary, block_myoverview{{/str}}</span>
-                    {{{summary}}}
-                </div>
-                <div class="ml-auto mt-auto w-50 p-t-1">
                     {{#hasprogress}}
-                        {{> block_myoverview/progress-bar}}
+                        <div class="col-md-5 pt-3">
+                            {{> block_myoverview/progress-bar}}
+                        </div>
                     {{/hasprogress}}
+                </div>
+                <div class="row-fluid">
+                    <div class="col-md-12 mt-2 summary">
+                        <span class="sr-only">{{#str}}aria:coursesummary, block_myoverview{{/str}}</span>
+                        {{{summary}}}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </li>
 {{/courses}}
-</div>
+</ul>
