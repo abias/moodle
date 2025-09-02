@@ -29,6 +29,8 @@
  * @param int $oldversion
  */
 function xmldb_block_myoverview_upgrade($oldversion) {
+    global $CFG;
+
     // Automatically generated Moodle v4.2.0 release upgrade line.
     // Put any upgrade step following this.
 
@@ -43,6 +45,17 @@ function xmldb_block_myoverview_upgrade($oldversion) {
 
     // Automatically generated Moodle v5.0.0 release upgrade line.
     // Put any upgrade step following this.
+
+    if ($oldversion < 2025041401) {
+        // If the $CFG->courselistshortnames setting is enabled.
+        if ($CFG->courselistshortnames == true) {
+            // Enable the short name filter.
+            set_config('displaysortingshortname', 1, 'block_myoverview');
+        }
+
+        // Myoverview savepoint reached.
+        upgrade_plugin_savepoint(true, 2025041401, 'block', 'myoverview');
+    }
 
     return true;
 }

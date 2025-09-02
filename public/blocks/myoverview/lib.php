@@ -103,17 +103,17 @@ function block_myoverview_user_preferences(): array {
         'permissioncallback' => [core_user::class, 'is_current_user'],
     ];
 
-    $preferences['block_myoverview_user_sort_preference'] = array(
+    $preferences['block_myoverview_user_sort_preference'] = [
         'null' => NULL_NOT_ALLOWED,
-        'default' => BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+        'default' => get_config('block_myoverview', 'defaultsorting'),
         'type' => PARAM_ALPHA,
-        'choices' => array(
+        'choices' => [
             BLOCK_MYOVERVIEW_SORTING_TITLE,
             BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
-            BLOCK_MYOVERVIEW_SORTING_SHORTNAME
-        ),
+            BLOCK_MYOVERVIEW_SORTING_SHORTNAME,
+        ],
         'permissioncallback' => [core_user::class, 'is_current_user'],
-    );
+    ];
 
     $preferences['block_myoverview_user_view_preference'] = array(
         'null' => NULL_NOT_ALLOWED,

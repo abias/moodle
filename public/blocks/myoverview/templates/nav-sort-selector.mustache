@@ -22,10 +22,15 @@
     Example context (json):
     {
         "title": false,
-        "lastaccessed": true
+        "lastaccessed": true,
+        "displaysortingtitle": true,
+        "displaysortinglastaccessed": true,
+        "displaysortingshortname": true,
+        "displaysortingselector": true
     }
 }}
 
+{{#displaysortingselector}}
 <div class="mb-1 me-1 d-flex flex-wrap align-items-center">
     <div class="dropdown">
         <button id="sortingdropdown" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{#str}} aria:sortingdropdown, block_myoverview {{/str}}">
@@ -36,23 +41,28 @@
             </span>
         </button>
         <ul class="dropdown-menu" role="menu" data-show-active-item data-skip-active-class="true" aria-labelledby="sortingdropdown">
+            {{#displaysortingtitle}}
             <li>
                 <a class="dropdown-item" href="#" data-filter="sort" data-pref="title" data-value="fullname" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#title}}aria-current="true"{{/title}}>
                     {{#str}} sortbytitle, block_myoverview {{/str}}
                 </a>
             </li>
+            {{/displaysortingtitle}}
             {{#showsortbyshortname}}
             <li>
                 <a class="dropdown-item" href="#" data-filter="sort" data-pref="shortname" data-value="shortname" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#shortname}}aria-current="true"{{/shortname}}>
                     {{#str}} sortbyshortname, block_myoverview {{/str}}
                 </a>
             </li>
-             {{/showsortbyshortname}}
+            {{/showsortbyshortname}}
+            {{#displaysortinglastaccessed}}
             <li>
                 <a class="dropdown-item" href="#" data-filter="sort" data-pref="lastaccessed" data-value="ul.timeaccess desc" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#lastaccessed}}aria-current="true"{{/lastaccessed}}>
                     {{#str}} sortbylastaccessed, block_myoverview {{/str}}
                 </a>
             </li>
+            {{/displaysortinglastaccessed}}
         </ul>
     </div>
 </div>
+{{/displaysortingselector}}

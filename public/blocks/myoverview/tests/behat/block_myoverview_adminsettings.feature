@@ -12,19 +12,19 @@ Feature: The my overview block allows admins to easily configure the students' c
       | name        | category | idnumber |
       | Category 1  | 0        | CAT1     |
     And the following "courses" exist:
-      | fullname | shortname | category | startdate                   | enddate         |
-      | Course 1 | C1        | 0        | ##1 month ago##             | ##15 days ago## |
-      | Course 2 | C2        | 0        | ##yesterday##               | ##tomorrow## |
-      | Course 3 | C3        | 0        | ##yesterday##               | ##tomorrow## |
-      | Course 4 | C4        | CAT1     | ##yesterday##               | ##tomorrow## |
+      | fullname | shortname | category | startdate                   | enddate                    |
+      | Course 1 | C1        | 0        | ##1 month ago##             | ##15 days ago##            |
+      | Course 2 | C2        | 0        | ##yesterday##               | ##tomorrow##               |
+      | Course 3 | C3        | 0        | ##yesterday##               | ##tomorrow##               |
+      | Course 4 | C4        | CAT1     | ##yesterday##               | ##tomorrow##               |
       | Course 5 | C5        | 0        | ##first day of next month## | ##last day of next month## |
     And the following "course enrolments" exist:
-      | user | course | role |
-      | student1 | C1 | student |
-      | student1 | C2 | student |
-      | student1 | C3 | student |
-      | student1 | C4 | student |
-      | student1 | C5 | student |
+      | user     | course | role    |
+      | student1 | C1     | student |
+      | student1 | C2     | student |
+      | student1 | C3     | student |
+      | student1 | C4     | student |
+      | student1 | C5     | student |
 
   Scenario: Enable 'All (including removed from view)' course filter option
     Given I log in as "admin"
@@ -208,3 +208,55 @@ Feature: The my overview block allows admins to easily configure the students' c
     And I should see "Course 4" in the "Course overview" "block"
     And I should not see "Course 1" in the "Course overview" "block"
     And I should not see "Course 5" in the "Course overview" "block"
+
+  Scenario Outline: Enable/ Disable available course sorting options
+    Given the following config values are set as admin:
+      | displaysortingtitle        | <titlevalue>      | block_myoverview |
+      | displaysortingshortname    | <shortnamevalue>  | block_myoverview |
+      | displaysortinglastaccessed | <lastaccessvalue> | block_myoverview |
+    And I am on the "My courses" page logged in as "student1"
+    And I click on "button#sortingdropdown" "css_element" in the "Course overview" "block"
+    Then "<dropdownstring>" "list_item" <shouldornot> exist in the "[aria-labelledby='sortingdropdown']" "css_element"
+
+    Examples:
+      | titlevalue | shortnamevalue | lastaccessvalue | shouldornot | dropdownstring        |
+      | 1          | 1              | 1               | should      | Sort by course name   |
+      | 0          | 1              | 1               | should not  | Sort by course name   |
+      | 1          | 1              | 1               | should      | Sort by short name    |
+      | 1          | 0              | 1               | should not  | Sort by short name    |
+      | 1          | 1              | 1               | should      | Sort by last accessed |
+      | 1          | 1              | 0               | should not  | Sort by last accessed |
+
+  Scenario: Disable all course sorting options
+    Given the following config values are set as admin:
+      | displaysortingtitle        | 0 | block_myoverview |
+      | displaysortingshortname    | 0 | block_myoverview |
+      | displaysortinglastaccessed | 0 | block_myoverview |
+    And I am on the "My courses" page logged in as "student1"
+    And "button#sortingdropdown" "css_element" should not exist in the ".block_myoverview" "css_element"
+    And "Course 4" "text" should appear before "Course 5" "text" in the "Course overview" "block"
+
+  Scenario: Disable all but one course sorting option
+    Given the following config values are set as admin:
+      | displaysortingtitle        | 0 | block_myoverview |
+      | displaysortingshortname    | 0 | block_myoverview |
+      | displaysortinglastaccessed | 1 | block_myoverview |
+    And I am on the "Course 5" course page logged in as "student1"
+    And I am on the "My courses" page
+    Then "button#sortingdropdown" "css_element" should not exist in the ".block_myoverview" "css_element"
+    And "Course 5" "text" should appear after "Course 4" "text" in the "Course overview" "block"
+
+  Scenario Outline: Define default course sorting option
+    Given the following config values are set as admin:
+      | displaysortingtitle        | 1       | block_myoverview |
+      | displaysortingshortname    | 1       | block_myoverview |
+      | displaysortinglastaccessed | 1       | block_myoverview |
+      | defaultsorting             | <value> | block_myoverview |
+    And I am on the "My courses" page logged in as "student1"
+    Then I should see "<dropdownstring>" in the "button#sortingdropdown" "css_element"
+
+    Examples:
+      | value        | dropdownstring        |
+      | title        | Sort by course name   |
+      | shortname    | Sort by short name    |
+      | lastaccessed | Sort by last accessed |

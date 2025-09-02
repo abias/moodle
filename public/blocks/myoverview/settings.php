@@ -113,11 +113,68 @@ if ($ADMIN->fulltree) {
             'block_myoverview/displaygroupingfavourites',
             get_string('favourites', 'block_myoverview'),
             '',
-            1));
+            1)
+    );
 
     $settings->add(new admin_setting_configcheckbox(
             'block_myoverview/displaygroupinghidden',
             get_string('hiddencourses', 'block_myoverview'),
             '',
-            1));
+            1)
+    );
+
+    // Available sortings.
+    $setting = new admin_setting_heading(
+        'block_myoverview/availablesortings',
+        get_string('availablesortings', 'block_myoverview'),
+        get_string('availablesortings_desc', 'block_myoverview')
+    );
+    $settings->add($setting);
+
+    // Enable / Disable available sorting options.
+    $setting = new admin_setting_configcheckbox(
+        'block_myoverview/displaysortingtitle',
+        get_string('title', 'block_myoverview'),
+        '',
+        1
+    );
+    $settings->add($setting);
+
+    $setting = new admin_setting_configcheckbox(
+        'block_myoverview/displaysortinglastaccessed',
+        get_string('lastaccessed', 'block_myoverview'),
+        '',
+        1
+    );
+    $settings->add($setting);
+
+    $setting = new admin_setting_configcheckbox(
+        'block_myoverview/displaysortingshortname',
+        get_string('shortname', 'block_myoverview'),
+        '',
+        0
+    );
+    $settings->add($setting);
+
+    // Sorting settings.
+    $setting = new admin_setting_heading(
+        'block_myoverview/sortingsettings',
+        get_string('sortingsettings', 'block_myoverview'),
+        get_string('sortingsettings_desc', 'block_myoverview')
+    );
+    $settings->add($setting);
+
+    // Default sorting.
+    $choices = [BLOCK_MYOVERVIEW_SORTING_TITLE => get_string('title', 'block_myoverview'),
+            BLOCK_MYOVERVIEW_SORTING_LASTACCESSED => get_string('lastaccessed', 'block_myoverview'),
+            BLOCK_MYOVERVIEW_SORTING_SHORTNAME => get_string('shortname', 'block_myoverview')];
+    $setting = new admin_setting_configselect(
+        'block_myoverview/defaultsorting',
+        get_string('defaultsorting', 'block_myoverview'),
+        get_string('defaultsorting_desc', 'block_myoverview'),
+        BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+        $choices
+    );
+    $settings->add($setting);
+    unset($choices);
 }

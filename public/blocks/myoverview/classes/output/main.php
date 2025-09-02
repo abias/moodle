@@ -139,6 +139,34 @@ class main implements renderable, templatable {
     private $displaygroupingcustomfield;
 
     /**
+     * Store a course sorting option setting.
+     *
+     * @var bool
+     */
+    private $displaysortingtitle;
+
+    /**
+     * Store a course sorting option setting.
+     *
+     * @var bool
+     */
+    private $displaysortinglastaccessed;
+
+    /**
+     * Store a course sorting option setting.
+     *
+     * @var bool
+     */
+    private $displaysortingshortname;
+
+    /**
+     * Store if sorting selector should be shown.
+     *
+     * @var bool
+     */
+    protected $displaysortingselector;
+
+    /**
      * Store the custom field used by customfield grouping.
      *
      * @var string
@@ -191,15 +219,18 @@ class main implements renderable, templatable {
 
         // Check and remember the given sorting.
         if ($sort) {
-            $this->sort = $sort;
-        } else if ($CFG->courselistshortnames) {
-            $this->sort = BLOCK_MYOVERVIEW_SORTING_SHORTNAME;
+            // Build the sorting option name to check if the given sorting is (still) enabled.
+            $sortingconfigname = 'displaysorting' . $sort;
+            // Check if the given sorting is enabled and remember it if it is.
+            if ($config->$sortingconfigname == true) {
+                $this->sort = $sort;
+
+                // Otherwise, determine the fallback sorting and remember it.
+            } else {
+                $this->sort = $this->get_fallback_sorting($config);
+            }
         } else {
-            $this->sort = BLOCK_MYOVERVIEW_SORTING_TITLE;
-        }
-        // In case sorting remembered is shortname and display extended course names not checked,
-        // we should revert sorting to title.
-        if (!$CFG->courselistshortnames && $sort == BLOCK_MYOVERVIEW_SORTING_SHORTNAME) {
+            // Fallback to title if no sorting is enabled.
             $this->sort = BLOCK_MYOVERVIEW_SORTING_TITLE;
         }
 
@@ -236,6 +267,11 @@ class main implements renderable, templatable {
         $this->displaygroupingcustomfield = ($config->displaygroupingcustomfield && $config->customfiltergrouping);
         $this->customfiltergrouping = $config->customfiltergrouping;
 
+        // Check and remember if the particular sorting options should be shown or not.
+        $this->displaysortingtitle = $config->displaysortingtitle;
+        $this->displaysortinglastaccessed = $config->displaysortinglastaccessed;
+        $this->displaysortingshortname = $config->displaysortingshortname;
+
         // Check and remember if the grouping selector should be shown at all or not.
         // It will be shown if more than 1 grouping option is enabled.
         $displaygroupingselectors = array($this->displaygroupingallincludinghidden,
@@ -252,6 +288,21 @@ class main implements renderable, templatable {
             $this->displaygroupingselector = false;
         }
         unset ($displaygroupingselectors, $displaygroupingselectorscount);
+
+        // Check and remember if the sorting selector should be shown at all or not.
+        // It will be shown if more than 1 sorting option is enabled.
+        $displaysortingselectors = [
+            $this->displaysortingtitle,
+            $this->displaysortinglastaccessed,
+            $this->displaysortingshortname,
+        ];
+        $displaysortingselectorscount = count(array_filter($displaysortingselectors));
+        if ($displaysortingselectorscount > 1) {
+            $this->displaysortingselector = true;
+        } else {
+            $this->displaysortingselector = false;
+        }
+        unset($displaysortingselectors, $displaysortingselectorscount);
     }
     /**
      * Determine the most sensible fallback grouping to use (in cases where the stored selection
@@ -287,6 +338,26 @@ class main implements renderable, templatable {
         // In this case, no grouping option is enabled and the grouping is not needed at all.
         // But it's better not to leave $this->grouping unset for any unexpected case.
         return BLOCK_MYOVERVIEW_GROUPING_ALLINCLUDINGHIDDEN;
+    }
+
+    /**
+     * Determine the most sensible fallback sorting to use (in cases where the stored selection
+     * is no longer available).
+     * @param object $config
+     * @return string
+     */
+    private function get_fallback_sorting($config) {
+        if ($config->displaysortingtitle == true) {
+            return BLOCK_MYOVERVIEW_SORTING_TITLE;
+        }
+        if ($config->displaysortinglastaccessed == true) {
+            return BLOCK_MYOVERVIEW_SORTING_LASTACCESSED;
+        }
+        if ($config->displaysortingshortname == true) {
+            return BLOCK_MYOVERVIEW_SORTING_SHORTNAME;
+        }
+        // In this case, no sorting option is enabled and the sorting should fall back to the default sorting by title.
+        return BLOCK_MYOVERVIEW_SORTING_TITLE;
     }
 
     /**
@@ -484,7 +555,11 @@ class main implements renderable, templatable {
             'customfieldvalue' => $this->customfieldvalue,
             'customfieldvalues' => $customfieldvalues,
             'selectedcustomfield' => $selectedcustomfield,
-            'showsortbyshortname' => $CFG->courselistshortnames,
+            'showsortbyshortname' => $this->displaysortingshortname,
+            'displaysortingtitle' => $this->displaysortingtitle,
+            'displaysortinglastaccessed' => $this->displaysortinglastaccessed,
+            'displaysortingshortname' => $this->displaysortingshortname,
+            'displaysortingselector' => $this->displaysortingselector,
         ];
         return array_merge($defaultvariables, $preferences);
 
