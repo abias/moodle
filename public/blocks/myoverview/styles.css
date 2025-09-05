@@ -12,3 +12,37 @@
 .page-mycourses .block_myoverview .block-controls {
     display: none;
 }
+
+/* The following styles apply only if the block is shown in the drawer-right region.
+   In this region, the block must make sensible use of the small column width of the block drawer. */
+
+/* Card view. */
+#block-region-side-pre .block_myoverview [data-display="card"] .card-grid.row div:has(.course-card) {
+    min-width: 100%;
+}
+
+/* List view & summary view. */
+/* Remove the course-image. */
+#block-region-side-pre .block_myoverview [data-display="list"] .list-group-item .row div:has(.list-image),
+#block-region-side-pre .block_myoverview [data-display="summary"] .list-group-item .row div:has(.summary-image) {
+    display: none !important; /* stylelint-disable-line declaration-no-important */
+}
+/* New widths for the remaining columns. */
+.block_myoverview [data-display="list"] .list-group-item .col-md-9,
+.block_myoverview [data-display="summary"] .list-group-item .col-md-9 {
+    padding: 0 0 0 5px;
+    /* Bootstrap is using a 12 column grid: 2 (picture) + 9 (content) + 1 (menu) = 12.
+       We take away 2 for the picture, so 9+1=10; we need now about 11/12. */
+    flex: 0 0 91.66667%;
+    max-width: 91.66667%;
+}
+/* We do want to safe space on small devices - no scroll to death. */
+#block-region-side-pre .block_myoverview [data-display="list"] .list-group-item .row,
+#block-region-side-pre .block_myoverview [data-display="summary"] .list-group-item .row {
+    flex-wrap: nowrap;
+}
+/* No 100% for the menu. */
+#block-region-side-pre .block_myoverview [data-display="list"] .list-group-item .menu,
+#block-region-side-pre .block_myoverview [data-display="summary"] .list-group-item .menu {
+    width: auto;
+}
