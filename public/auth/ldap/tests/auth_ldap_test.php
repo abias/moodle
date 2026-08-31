@@ -579,12 +579,27 @@ final class auth_ldap_test extends \advanced_testcase {
 
         $this->resetAfterTest();
 
-        if (!defined('TEST_AUTH_LDAP_HOST_URL') || !defined('TEST_AUTH_LDAP_BIND_DN') || !defined('TEST_AUTH_LDAP_BIND_PW') || !defined('TEST_AUTH_LDAP_DOMAIN')) {
+        if (
+            !defined('TEST_AUTH_LDAP_HOST_URL') ||
+            !defined('TEST_AUTH_LDAP_BIND_DN') ||
+            !defined('TEST_AUTH_LDAP_BIND_PW') ||
+            !defined('TEST_AUTH_LDAP_DOMAIN')
+        ) {
             $this->markTestSkipped('External LDAP test server not configured.');
         }
 
         $debuginfo = '';
-        if (!$connection = ldap_connect_moodle(TEST_AUTH_LDAP_HOST_URL, 3, 'rfc2307', TEST_AUTH_LDAP_BIND_DN, TEST_AUTH_LDAP_BIND_PW, LDAP_DEREF_NEVER, $debuginfo, false)) {
+        $connection = ldap_connect_moodle(
+            TEST_AUTH_LDAP_HOST_URL,
+            3,
+            'rfc2307',
+            TEST_AUTH_LDAP_BIND_DN,
+            TEST_AUTH_LDAP_BIND_PW,
+            LDAP_DEREF_NEVER,
+            $debuginfo,
+            false
+        );
+        if (!$connection) {
             $this->markTestSkipped('Can not connect to LDAP test server: ' . $debuginfo);
         }
 
@@ -685,12 +700,27 @@ final class auth_ldap_test extends \advanced_testcase {
 
         $this->resetAfterTest();
 
-        if (!defined('TEST_AUTH_LDAP_HOST_URL') || !defined('TEST_AUTH_LDAP_BIND_DN') || !defined('TEST_AUTH_LDAP_BIND_PW') || !defined('TEST_AUTH_LDAP_DOMAIN')) {
+        if (
+            !defined('TEST_AUTH_LDAP_HOST_URL') ||
+            !defined('TEST_AUTH_LDAP_BIND_DN') ||
+            !defined('TEST_AUTH_LDAP_BIND_PW') ||
+            !defined('TEST_AUTH_LDAP_DOMAIN')
+        ) {
             $this->markTestSkipped('External LDAP test server not configured.');
         }
 
         $debuginfo = '';
-        if (!$connection = ldap_connect_moodle(TEST_AUTH_LDAP_HOST_URL, 3, 'rfc2307', TEST_AUTH_LDAP_BIND_DN, TEST_AUTH_LDAP_BIND_PW, LDAP_DEREF_NEVER, $debuginfo, false)) {
+        $connection = ldap_connect_moodle(
+            TEST_AUTH_LDAP_HOST_URL,
+            3,
+            'rfc2307',
+            TEST_AUTH_LDAP_BIND_DN,
+            TEST_AUTH_LDAP_BIND_PW,
+            LDAP_DEREF_NEVER,
+            $debuginfo,
+            false
+        );
+        if (!$connection) {
             $this->markTestSkipped('Can not connect to LDAP test server: ' . $debuginfo);
         }
 
@@ -744,12 +774,27 @@ final class auth_ldap_test extends \advanced_testcase {
 
         $this->resetAfterTest();
 
-        if (!defined('TEST_AUTH_LDAP_HOST_URL') || !defined('TEST_AUTH_LDAP_BIND_DN') || !defined('TEST_AUTH_LDAP_BIND_PW') || !defined('TEST_AUTH_LDAP_DOMAIN')) {
+        if (
+            !defined('TEST_AUTH_LDAP_HOST_URL') ||
+            !defined('TEST_AUTH_LDAP_BIND_DN') ||
+            !defined('TEST_AUTH_LDAP_BIND_PW') ||
+            !defined('TEST_AUTH_LDAP_DOMAIN')
+        ) {
             $this->markTestSkipped('External LDAP test server not configured.');
         }
 
         $debuginfo = '';
-        if (!$connection = ldap_connect_moodle(TEST_AUTH_LDAP_HOST_URL, 3, 'rfc2307', TEST_AUTH_LDAP_BIND_DN, TEST_AUTH_LDAP_BIND_PW, LDAP_DEREF_NEVER, $debuginfo, false)) {
+        $connection = ldap_connect_moodle(
+            TEST_AUTH_LDAP_HOST_URL,
+            3,
+            'rfc2307',
+            TEST_AUTH_LDAP_BIND_DN,
+            TEST_AUTH_LDAP_BIND_PW,
+            LDAP_DEREF_NEVER,
+            $debuginfo,
+            false
+        );
+        if (!$connection) {
             $this->markTestSkipped('Can not connect to LDAP test server: ' . $debuginfo);
         }
 
